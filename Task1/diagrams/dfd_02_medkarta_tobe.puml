@@ -1,0 +1,45 @@
+@startuml dfd_02_medkarta_tobe
+title DFD To-Be. Процесс 2. Ведение медкарты и анализов (C4 Container)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(Doctor, "Медицинский специалист", "Врач")
+Person(Reception, "Сотрудник ресепшена", "Запрашивает карту")
+System_Ext(Lab, "Лаборатория", "Внешняя лаборатория анализов")
+
+System_Boundary(Medicamente, "Медикаменте") {
+  Container(P2_1, "Проведение приёма", "Сервис", "Внесение данных осмотра [RBAC]")
+  Container(P2_2, "Приём анализов", "API-сервис", "Валидация и сохранение [TLS]")
+  Container(P2_3, "Формирование медкарты", "Сервис", "Сборка карты [RBAC]")
+
+  ContainerDb(DS_PatientBD, "Медкарты", "Объектное хранилище + шифрование", "Сканы [AES][AUDIT]")
+  ContainerDb(DS_DataFile, "Файлы пациента", "Объектное хранилище + шифрование", "Файлы [AES][AUDIT]")
+  ContainerDb(DS_Registry, "Реестр анализов", "PostgreSQL", "Анализы [AES][OPA]")
+  ContainerDb(DS_Patients, "БД пациентов", "PostgreSQL", "PII [AES][OPA]")
+}
+
+System_Ext(AuditLog, "Аудит-лог", "Elastic", "Журналирование [AUDIT]")
+System_Ext(DLP, "DLP-сканер", "Контроль утечек", "Поиск PII/PHI [DLP]")
+System_Ext(PolicyEngine, "Политики доступа", "OPA", "Теги и роли [OPA]")
+
+Rel(Doctor, P2_1, "Жалобы, осмотр, назначения [phi][pii] [RBAC]")
+Rel(P2_1, DS_DataFile, "Заметки, файлы [phi] [AES][AUDIT]")
+Rel(Lab, P2_2, "Результаты анализов [phi][pii] [TLS]")
+Rel(P2_2, DS_Registry, "Реестр анализов [phi] [AES][OPA]")
+Rel(P2_2, DS_PatientBD, "Скан заключения [phi][pii] [AES][AUDIT]")
+Rel(Reception, P2_3, "Запрос карты [pii] [RBAC]")
+Rel(DS_PatientBD, P2_3, "Сканы [phi][pii] [AES]")
+Rel(DS_DataFile, P2_3, "Файлы [phi] [AES]")
+Rel(DS_Patients, P2_3, "Данные пациента [pii] [OPA]")
+Rel(P2_3, Doctor, "Медкарта [phi][pii] [RBAC][AUDIT]")
+Rel(P2_2, DLP, "Скан на PII/PHI [DLP]")
+Rel(P2_3, AuditLog, "События доступа [AUDIT]")
+
+note right of DS_PatientBD
+  Объектное хранилище,
+  AES-256 at rest,
+  ACL и аудит чтения,
+  DLP-контроль
+end note
+@enduml
