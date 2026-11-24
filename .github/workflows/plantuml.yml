@@ -42,16 +42,16 @@ jobs:
       run: |
         java -jar plantuml.jar -tpng Task1/diagrams/*.puml || true
 
-        - name: Commit Diagrams
-          run: |
-            if [ -n "$(git status --porcelain)" ]; then
-              git config --local user.email "github-actions[bot]@users.noreply.github.com"
-              git config --local user.name "github-actions[bot]"
-              git add Task1/diagrams/diagrams/*.png
-              git commit -m "chore: update diagrams [skip ci]"
-              git push origin HEAD
-            else
-              echo "No changes to commit"
-            fi
+    - name: Commit Diagrams
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add Task1/diagrams/diagrams/*.png
+          git commit -m "chore: update diagrams [skip ci]"
+          git push origin HEAD
+        else
+          echo "No changes to commit"
+        fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
