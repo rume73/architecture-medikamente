@@ -1,0 +1,33 @@
+@startuml dfd_02_medkarta_L2
+title DFD As-Is. Процесс 2. Level 2. Детализация ведения медкарты (C4 Container)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(Doctor, "Медицинский специалист", "Врач")
+System_Ext(Lab, "Лаборатория", "Внешняя лаборатория анализов")
+
+System_Boundary(Medicamente, "Медикаменте") {
+  Container(P2_1_1, "Сбор анамнеза", "Ручной процесс", "Жалобы, хроники [phi][pii]")
+  Container(P2_1_2, "Осмотр и назначения", "Ручной процесс", "Заметки [phi]")
+  Container(P2_2_1, "Приём результатов", "Ручной процесс", "Валидация [phi]")
+  Container(P2_2_2, "Сохранение в реестр", "Ручной процесс", "Запись [phi]")
+  Container(P2_3_1, "Сканирование документов", "Ручной процесс", "Скан [phi][pii]")
+  Container(P2_3_2, "Сохранение на диск", "Ручной процесс", "Файл [phi][pii]")
+
+  ContainerDb(DS_DataFile, "Data file 1", "Общий диск", "Заметки, файлы [phi]")
+  ContainerDb(DS_Registry, "RegistryByDate", "Excel", "Реестр [phi]")
+  ContainerDb(DS_PatientBD, "Patient1-FIO-BD", "Сканы", "Медкарты [phi][pii]")
+}
+
+Rel(Doctor, P2_1_1, "Жалобы, хроники [phi][pii]")
+Rel(P2_1_1, P2_1_2, "Анамнез [phi]")
+Rel(P2_1_2, DS_DataFile, "Заметки, файлы [phi]")
+Rel(Lab, P2_2_1, "Результаты [phi]")
+Rel(P2_2_1, P2_2_2, "Валидация [phi]")
+Rel(P2_2_2, DS_Registry, "Запись в реестр [phi]")
+Rel(Doctor, P2_3_1, "Документ [phi][pii]")
+Rel(P2_3_1, P2_3_2, "Скан [phi][pii]")
+Rel(P2_3_2, DS_PatientBD, "Файл [phi][pii]")
+
+@enduml

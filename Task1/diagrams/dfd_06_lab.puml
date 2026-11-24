@@ -1,0 +1,28 @@
+@startuml dfd_06_lab
+title DFD As-Is. Процесс 6. Интеграция с лабораторией (C4 Container)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(Reception, "Сотрудник ресепшена", "Передаёт заявки")
+Person(Doctor, "Медицинский специалист", "Получает результаты")
+System_Ext(Lab, "Лаборатория", "Внешняя лаборатория анализов")
+
+System_Boundary(Medicamente, "Медикаменте") {
+  Container(P6_1, "Передача заявки", "Ручной процесс", "Направление [phi][pii]")
+  Container(P6_2, "Получение результатов", "Ручной процесс", "Email / телефон / бумага [phi][pii]")
+  Container(P6_3, "Внесение в реестр", "Ручной процесс", "Ручной ввод [phi]")
+
+  ContainerDb(DS_Registry, "RegistryByDate", "Excel", "Реестр [phi]")
+  ContainerDb(DS_PatientBD, "Patient1-FIO-BD", "Сканы", "Результаты [phi][pii]")
+}
+
+Rel(Reception, P6_1, "Направление [phi][pii]")
+Rel(P6_1, Lab, "email / телефон [phi][pii]", "неформальный канал")
+Rel(Lab, P6_2, "email / бумага [phi][pii]", "неформальный канал")
+Rel(P6_2, P6_3, "Ручной ввод [phi]")
+Rel(P6_3, DS_Registry, "Запись [phi]")
+Rel(P6_3, DS_PatientBD, "Скан [phi][pii]")
+Rel(DS_PatientBD, Doctor, "Результаты [phi]")
+
+@enduml
