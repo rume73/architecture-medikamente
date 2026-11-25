@@ -1,0 +1,28 @@
+@startuml c4_context_tobe
+title C4 Context. Целевая архитектура «Медикаменте» (Level 1)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Context.puml
+
+Person(Patient, "Пациент", "Записывается, оплачивает, смотрит свои данные")
+Person(Staff, "Сотрудник", "Ресепшен, врач, кассир, бухгалтер, склад")
+
+System(Medicamente, "Платформа «Медикаменте»", "Запись, медкарты, оплата, аналитика с Privacy by Design")
+
+System_Ext(Lab, "Лаборатория", "Анализы")
+System_Ext(Tax, "ФНС", "Отчётность")
+System_Ext(Supplier, "Поставщик", "ТМЦ")
+System_Ext(PaymentProvider, "Платёжный провайдер", "Токенизация оплат")
+System_Ext(KMS, "KMS / Vault", "Ключи и секреты")
+System_Ext(Notify, "SMS/Email-провайдер", "Уведомления с согласия")
+
+Rel(Patient, Medicamente, "Запись, оплата, ЛК", "HTTPS/TLS")
+Rel(Staff, Medicamente, "Рабочие места", "HTTPS/TLS")
+Rel(Medicamente, Lab, "API-обмен", "TLS")
+Rel(Medicamente, Tax, "Отчётность", "TLS")
+Rel(Supplier, Medicamente, "Поставки", "TLS")
+Rel(Medicamente, PaymentProvider, "Оплаты", "TLS, токенизация")
+Rel(Medicamente, KMS, "Ключи, секреты", "mTLS")
+Rel(Medicamente, Notify, "Уведомления", "TLS")
+
+@enduml

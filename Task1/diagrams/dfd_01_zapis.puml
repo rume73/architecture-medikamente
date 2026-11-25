@@ -1,0 +1,30 @@
+@startuml dfd_01_zapis
+title DFD As-Is. Процесс 1. Запись пациента на приём (C4 Container)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(Patient, "Пациент", "Клиент медицинского центра")
+Person(Reception, "Сотрудник ресепшена", "Записывает, заключает контракты")
+Person(Doctor, "Медицинский специалист", "Врач")
+
+System_Boundary(Medicamente, "Медикаменте") {
+  Container(P1_1, "Приём обращения", "Ручной процесс", "Сбор ФИО, ДР, телефона, email [pii]")
+  Container(P1_2, "Создание записи", "Ручной процесс", "Запись в журнал [pii]")
+  Container(P1_3, "Заключение контракта", "Ручной процесс", "Оформление договора [contract][pii]")
+
+  ContainerDb(DS_Journal, "Journal-Doctor-FIO 1", "Excel на общем диске", "Журнал записи [pii]")
+  ContainerDb(DS_Patients, "Patients", "Excel на общем диске", "Список пациентов [pii]")
+  ContainerDb(DS_Contracts, "Контракты", "Файлы на ресепшене", "Клиентские договоры [contract]")
+}
+
+Rel(Patient, P1_1, "ФИО, ДР, телефон, email [pii]")
+Rel(P1_1, DS_Patients, "Карточка пациента [pii]")
+Rel(P1_1, P1_2, "Запрос на запись [pii]")
+Rel(Reception, P1_2, "Подтверждение слота")
+Rel(P1_2, DS_Journal, "Запись в журнал [pii]")
+Rel(DS_Journal, Doctor, "Журнал на день [pii]")
+Rel(Patient, P1_3, "Подпись [contract]")
+Rel(P1_3, DS_Contracts, "Контракт [contract][pii]")
+
+@enduml

@@ -1,0 +1,35 @@
+@startuml dfd_03_oplata_tobe
+title DFD To-Be. Процесс 3. Оплата услуг (C4 Container)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(Patient, "Пациент", "Клиент")
+Person(Cashier, "Кассир", "Принимает оплату")
+Person(Accountant, "Бухгалтер", "Ведёт учёт")
+
+System_Boundary(Medicamente, "Медикаменте") {
+  Container(PaymentGateway, "Платёжный шлюз", "Сервис", "Приём оплаты [TLS][TOKEN]")
+  Container(P3_2, "Проведение в 1С", "1С клиент-сервер", "Единый источник правды [AES]")
+  ContainerDb(DS_KKM, "ККМ", "Контрольно-кассовая машина", "Чеки [TOKEN]")
+  ContainerDb(DS_1C_Acc, "1С:Бухгалтерия", "Клиент-сервер + СУБД", "Проводки [AES][RBAC]")
+}
+
+System_Ext(AuditLog, "Аудит-лог", "Elastic", "Журналирование [AUDIT]")
+System_Ext(PolicyEngine, "Политики доступа", "OPA", "Проверка ролей [OPA]")
+
+Rel(Patient, PaymentGateway, "Оплата [payment] [TLS]")
+Rel(PaymentGateway, DS_KKM, "Токен платежа [TOKEN]")
+Rel(DS_KKM, P3_2, "Данные чека [payment] [TLS]")
+Rel(P3_2, DS_1C_Acc, "Проводка [payment][pii] [AES][RBAC]")
+Rel(Cashier, P3_2, "Подтверждение [RBAC]")
+Rel(DS_1C_Acc, Accountant, "Отчёт [payment] [RBAC][AUDIT]")
+Rel(P3_2, PolicyEngine, "Проверка доступа [OPA]")
+Rel(P3_2, AuditLog, "События платежей [AUDIT]")
+
+note right of DS_1C_Acc
+  Excel-реестр удалён.
+  Единый источник правды — 1С.
+  Платёжные данные токенизированы.
+end note
+@enduml

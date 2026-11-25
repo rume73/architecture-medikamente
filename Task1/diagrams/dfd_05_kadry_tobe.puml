@@ -1,0 +1,38 @@
+@startuml dfd_05_kadry_tobe
+title DFD To-Be. Процесс 5. Кадровый учёт и зарплата (C4 Container)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(Employee, "Сотрудник", "Работник компании")
+Person(Accountant, "Бухгалтер", "Ведёт кадры и зарплату")
+Person(HRManager, "Руководитель", "Согласует кадры")
+System_Ext(Tax, "Налоговая", "ФНС")
+
+System_Boundary(Medicamente, "Медикаменте") {
+  Container(P5_1, "Кадровый учёт", "1С клиент-сервер", "Записи [RBAC]")
+  Container(P5_2, "Начисление зарплаты", "1С клиент-сервер", "Ведомость [RBAC]")
+  Container(P5_3, "Отчётность", "Сервис", "Отчёты [TLS]")
+  ContainerDb(DS_1C_HR, "Кадры", "PostgreSQL + шифрование", "ПДн сотрудников [AES][OPA]")
+  ContainerDb(DS_1C_Salary, "Зарплата", "PostgreSQL + шифрование", "Ведомости [AES][OPA]")
+}
+
+System_Ext(AuditLog, "Аудит-лог", "Elastic", "Журналирование [AUDIT]")
+System_Ext(PolicyEngine, "Политики доступа", "OPA", "Роли кадры/зарплата [OPA]")
+
+Rel(Employee, P5_1, "Документы, данные [hr][pii] [TLS]")
+Rel(P5_1, DS_1C_HR, "Кадровая запись [hr][pii] [AES][OPA]")
+Rel(DS_1C_HR, P5_2, "Данные для расчёта [hr][pii] [RBAC]")
+Rel(P5_2, DS_1C_Salary, "Ведомость [hr][pii] [AES][OPA]")
+Rel(DS_1C_Salary, P5_3, "Данные [hr][pii] [RBAC]")
+Rel(P5_3, Tax, "Отчётность [hr][pii] [TLS]")
+Rel(HRManager, P5_1, "Согласование [RBAC]")
+Rel(P5_2, PolicyEngine, "Проверка ролей [OPA]")
+Rel(P5_3, AuditLog, "События [AUDIT]")
+
+note right of DS_1C_HR
+  Разделение ролей:
+  кадры / зарплата / отчётность.
+  Регламент ПДн сотрудников.
+end note
+@enduml

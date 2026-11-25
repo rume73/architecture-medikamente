@@ -1,0 +1,42 @@
+@startuml dfd_01_zapis_tobe
+title DFD To-Be. Процесс 1. Запись пациента на приём (C4 Container)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(Patient, "Пациент", "Клиент медицинского центра")
+Person(Reception, "Сотрудник ресепшена", "Записывает, заключает контракты")
+Person(Doctor, "Медицинский специалист", "Врач")
+
+System_Boundary(Medicamente, "Медикаменте") {
+  Container(Portal, "Портал записи", "Web/API", "Приём обращений, сбор согласий [TLS]")
+  Container(ConsentService, "Реестр согласий", "Сервис", "Хранение согласий [AES][AUDIT]")
+  Container(P1_2, "Создание записи", "Сервис", "Запись в журнал [RBAC]")
+  Container(P1_3, "Заключение контракта", "Сервис", "Оформление договора [AES][AUDIT]")
+
+  ContainerDb(DS_Patients, "БД пациентов", "PostgreSQL + шифрование", "PII [AES][OPA]")
+  ContainerDb(DS_Journal, "Журнал записи", "PostgreSQL", "Записи [AES][RBAC][AUDIT]")
+  ContainerDb(DS_Contracts, "Реестр контрактов", "Объектное хранилище", "Договоры [AES][AUDIT]")
+}
+
+System_Ext(AuditLog, "Аудит-лог", "Elastic", "Журналирование доступа [AUDIT]")
+System_Ext(PolicyEngine, "Политики доступа", "OPA", "Проверка тегов и ролей [OPA]")
+
+Rel(Patient, Portal, "ФИО, ДР, телефон, email [pii] [TLS]")
+Rel(Portal, ConsentService, "Согласие на обработку [AUDIT]")
+Rel(Portal, DS_Patients, "Карточка пациента [pii] [AES][OPA]")
+Rel(Portal, P1_2, "Запрос на запись [pii]")
+Rel(Reception, P1_2, "Подтверждение слота [RBAC]")
+Rel(P1_2, DS_Journal, "Запись в журнал [pii] [AES][RBAC]")
+Rel(DS_Journal, Doctor, "Журнал на день [pii] [RBAC]")
+Rel(Patient, P1_3, "Подпись [contract] [TLS]")
+Rel(P1_3, DS_Contracts, "Контракт [contract][pii] [AES]")
+Rel(P1_2, PolicyEngine, "Проверка доступа [OPA]")
+Rel(Portal, AuditLog, "События доступа [AUDIT]")
+
+note right of DS_Patients
+  Шифрование at rest AES-256,
+  доступ по OPA-политикам,
+  аудит каждого чтения
+end note
+@enduml

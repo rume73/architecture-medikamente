@@ -1,0 +1,33 @@
+@startuml dfd_02_medkarta
+title DFD As-Is. Процесс 2. Ведение медкарты и анализов (C4 Container)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(Doctor, "Медицинский специалист", "Врач")
+Person(Reception, "Сотрудник ресепшена", "Запрашивает карту")
+System_Ext(Lab, "Лаборатория", "Внешняя лаборатория анализов")
+
+System_Boundary(Medicamente, "Медикаменте") {
+  Container(P2_1, "Проведение приёма", "Ручной процесс", "Внесение данных осмотра [phi][pii]")
+  Container(P2_2, "Загрузка анализов", "Ручной процесс", "Приём и сохранение результатов [phi][pii]")
+  Container(P2_3, "Формирование медкарты", "Ручной процесс", "Сборка карты из файлов [phi][pii]")
+
+  ContainerDb(DS_PatientBD, "Patient1-FIO-BD", "Сканы PDF/JPG на общем диске", "Медкарты [phi][pii]")
+  ContainerDb(DS_DataFile, "Data file 1", "Разные форматы на общем диске", "Файлы пациента [phi]")
+  ContainerDb(DS_Registry, "RegistryByDate", "Excel", "Реестр анализов [phi]")
+  ContainerDb(DS_Patients, "Patients", "Excel", "Список пациентов [pii]")
+}
+
+Rel(Doctor, P2_1, "Жалобы, осмотр, назначения [phi][pii]")
+Rel(P2_1, DS_DataFile, "Заметки, файлы [phi]")
+Rel(Lab, P2_2, "Результаты анализов [phi][pii]")
+Rel(P2_2, DS_Registry, "Реестр анализов [phi]")
+Rel(P2_2, DS_PatientBD, "Скан заключения [phi][pii]")
+Rel(Reception, P2_3, "Запрос карты [pii]")
+Rel(DS_PatientBD, P2_3, "Сканы [phi][pii]")
+Rel(DS_DataFile, P2_3, "Файлы [phi]")
+Rel(DS_Patients, P2_3, "Данные пациента [pii]")
+Rel(P2_3, Doctor, "Медкарта [phi][pii]")
+
+@enduml

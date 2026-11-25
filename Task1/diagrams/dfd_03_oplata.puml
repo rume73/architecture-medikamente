@@ -1,0 +1,30 @@
+@startuml dfd_03_oplata
+title DFD As-Is. Процесс 3. Оплата услуг (C4 Container)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(Patient, "Пациент", "Клиент")
+Person(Cashier, "Кассир", "Принимает оплату")
+Person(Accountant, "Бухгалтер", "Ведёт учёт")
+
+System_Boundary(Medicamente, "Медикаменте") {
+  Container(P3_1, "Приём оплаты через ККМ", "Ручной процесс", "Чек [payment]")
+  Container(P3_2, "Внесение в 1С Бухгалтерия", "Ручной процесс", "Проводка [payment][pii]")
+  Container(P3_3, "Двойной учёт в Excel", "Ручной процесс", "Ручной ввод [payment]")
+
+  ContainerDb(DS_KKM, "ККМ", "Контрольно-кассовая машина", "Чеки [payment]")
+  ContainerDb(DS_1C_Acc, "1С:Бухгалтерия", "Файловый режим", "Проводки [payment][pii]")
+  ContainerDb(DS_Excel, "Excel-реестр платежей", "Excel", "Ручной реестр [payment]")
+}
+
+Rel(Patient, P3_1, "Оплата [payment]")
+Rel(P3_1, DS_KKM, "Чек [payment]")
+Rel(DS_KKM, P3_2, "Данные чека (OLE) [payment]")
+Rel(P3_2, DS_1C_Acc, "Проводка [payment][pii]")
+Rel(Cashier, P3_3, "Ручной ввод [payment]")
+Rel(P3_3, DS_Excel, "Строка реестра [payment]")
+Rel(DS_1C_Acc, Accountant, "Отчёт [payment]")
+Rel(DS_Excel, Accountant, "Реестр [payment]")
+
+@enduml

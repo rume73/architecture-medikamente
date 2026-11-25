@@ -1,0 +1,26 @@
+@startuml dfd_05_kadry
+title DFD As-Is. Процесс 5. Кадровый учёт и зарплата (C4 Container)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(Employee, "Сотрудник", "Работник компании")
+Person(Accountant, "Бухгалтер", "Ведёт кадры и зарплату")
+System_Ext(Tax, "Налоговая", "ФНС")
+
+System_Boundary(Medicamente, "Медикаменте") {
+  Container(P5_1, "Кадровый учёт", "Ручной процесс", "Кадровые записи [hr][pii]")
+  Container(P5_2, "Начисление зарплаты", "Ручной процесс", "Ведомость [hr][pii]")
+  Container(P5_3, "Подготовка отчётности", "Ручной процесс", "Отчёты [hr][pii]")
+
+  ContainerDb(DS_1C_Acc, "1С:Бухгалтерия", "Файловый режим", "Кадры, зарплата [hr][pii]")
+}
+
+Rel(Employee, P5_1, "Документы, данные [hr][pii]")
+Rel(P5_1, DS_1C_Acc, "Кадровая запись [hr][pii]")
+Rel(DS_1C_Acc, P5_2, "Данные для расчёта [hr][pii]")
+Rel(P5_2, DS_1C_Acc, "Ведомость [hr][pii]")
+Rel(DS_1C_Acc, P5_3, "Данные [hr][pii]")
+Rel(P5_3, Tax, "Отчётность [hr][pii]")
+
+@enduml

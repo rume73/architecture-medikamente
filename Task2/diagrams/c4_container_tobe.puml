@@ -1,0 +1,90 @@
+@startuml c4_container_tobe
+title C4 Container. Целевая архитектура «Медикаменте» (Level 2)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(Patient, "Пациент", "Клиент")
+Person(Staff, "Сотрудник", "Ресепшен, врач, кассир, бухгалтер, склад")
+
+System_Boundary(Medicamente, "Платформа «Медикаменте»") {
+  Container(ClientPortal, "Client Portal", "Web/Mobile", "ЛК пациента, запись [TLS][OIDC]")
+  Container(StaffPortal, "Staff Portal", "Web", "Рабочие места [RBAC][MASK]")
+  Container(APIGateway, "API Gateway", "Сервис", "Контракты, скрытие PII [TLS][OPA]")
+  Container(IAM, "Identity & Access Service", "Сервис + OPA", "RBAC/ABAC [OPA]")
+  Container(Consent, "Consent & Privacy Service", "Сервис", "Согласия, права субъекта [AUDIT]")
+  Container(Tagging, "Data Classification & Tagging", "Сервис", "Теги на входе [OPA]")
+  Container(Audit, "Audit & Monitoring", "Сервис", "Аудит и алертинг [AUDIT]")
+  Container(Vault, "Encryption & Key Management", "Vault", "Ключи, секреты [AES]")
+
+  Container(Appointment, "Appointment Service", "Сервис", "Запись [RBAC]")
+  Container(Medical, "Medical Records Service", "Сервис", "Медкарты [AES][RBAC]")
+  Container(Billing, "Billing Service", "Сервис", "Оплаты [TOKEN]")
+  Container(LabInt, "Laboratory Integration Service", "Сервис", "API с лабораторией [TLS][OPA]")
+  Container(Inventory, "Inventory Service", "Сервис", "ТМЦ [RBAC]")
+  Container(HR, "HR & Payroll Service", "Сервис", "Кадры [RBAC]")
+
+  ContainerDb(ObjectStorage, "Object Storage (Medical)", "S3-совместимое", "Сканы [AES][AUDIT]")
+  ContainerDb(DB, "Domain Databases", "PostgreSQL", "Доменные данные [AES][RBAC]")
+
+  Container(PrivacyLayer, "Privacy Layer", "Сервис", "Псевдонимизация, k-анонимность [OPA]")
+  Container(DataLake, "Data Lake", "S3-совместимое", "Обезличенные данные [AES]")
+  ContainerDb(ClickHouse, "ClickHouse (Analytics)", "ClickHouse", "Агрегаты [RBAC]")
+  Container(BI, "BI & ML Services", "Superset / Python", "Отчёты, ML [RBAC][AUDIT]")
+}
+
+System_Ext(OneC, "1С (клиент-сервер)", "Бухгалтерия, кадры, ТМЦ")
+System_Ext(KKM, "ККМ", "Чеки")
+System_Ext(Exchange, "Exchange + DLP", "Почта")
+System_Ext(Lab, "Лаборатория", "Анализы")
+System_Ext(Tax, "ФНС", "Отчётность")
+System_Ext(PaymentProvider, "Платёжный провайдер", "Токенизация")
+System_Ext(KMS, "KMS / Vault", "Ключи")
+System_Ext(Notify, "SMS/Email", "Уведомления")
+
+Rel(Patient, ClientPortal, "Запись, ЛК [TLS]")
+Rel(Staff, StaffPortal, "Работа [TLS]")
+Rel(ClientPortal, APIGateway, "API [TLS]")
+Rel(StaffPortal, APIGateway, "API [TLS]")
+Rel(APIGateway, IAM, "Аутентификация [OPA]")
+Rel(APIGateway, Consent, "Проверка согласия [AUDIT]")
+Rel(APIGateway, Appointment, "Маршрутизация")
+Rel(APIGateway, Medical, "Маршрутизация")
+Rel(APIGateway, Billing, "Маршрутизация")
+Rel(APIGateway, LabInt, "Маршрутизация")
+Rel(APIGateway, Inventory, "Маршрутизация")
+Rel(APIGateway, HR, "Маршрутизация")
+
+Rel(Appointment, DB, "Запись [AES]")
+Rel(Medical, DB, "Медкарты [AES]")
+Rel(Medical, ObjectStorage, "Сканы [AES]")
+Rel(Billing, DB, "Платежи [TOKEN]")
+Rel(LabInt, DB, "Анализы [AES]")
+Rel(Inventory, DB, "ТМЦ [AES]")
+Rel(HR, DB, "Кадры [AES]")
+
+Rel(Appointment, Tagging, "Тегирование [OPA]")
+Rel(Medical, Tagging, "Тегирование [OPA]")
+Rel(Billing, Tagging, "Тегирование [OPA]")
+Rel(LabInt, Tagging, "Тегирование [OPA]")
+
+Rel(Tagging, PrivacyLayer, "Обезличенные данные [OPA]")
+Rel(PrivacyLayer, DataLake, "Запись [AES]")
+Rel(DataLake, ClickHouse, "Агрегаты [AES]")
+Rel(ClickHouse, BI, "Отчёты [RBAC]")
+
+Rel(APIGateway, Audit, "События [AUDIT]")
+Rel(Consent, Audit, "События [AUDIT]")
+Rel(Medical, Audit, "Доступ к медкартам [AUDIT]")
+Rel(BI, Audit, "Доступ к аналитике [AUDIT]")
+
+Rel(APIGateway, Lab, "API [TLS]")
+Rel(Billing, PaymentProvider, "Оплаты [TLS][TOKEN]")
+Rel(HR, OneC, "Кадры [TLS]")
+Rel(Inventory, OneC, "ТМЦ [TLS]")
+Rel(Billing, KKM, "Чеки [TOKEN]")
+Rel(Medicamente, Tax, "Отчётность [TLS]")
+Rel(Consent, Notify, "Уведомления [TLS]")
+Rel(Vault, KMS, "Ключи [mTLS]")
+
+@enduml

@@ -1,0 +1,28 @@
+@startuml dfd_04_tmc
+title DFD As-Is. Процесс 4. Учёт ТМЦ и закупок (C4 Container)
+
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+Person(Warehouse, "Сотрудник склада", "Принимает поставки")
+Person(Accountant, "Бухгалтер", "Ведёт учёт")
+System_Ext(Supplier, "Поставщик", "Внешний контрагент")
+
+System_Boundary(Medicamente, "Медикаменте") {
+  Container(P4_1, "Приём поставки", "Ручной процесс", "Приёмка [commercial]")
+  Container(P4_2, "Оприходование в 1С ТиС", "Ручной процесс", "Приход [commercial]")
+  Container(P4_3, "Передача в бухгалтерию", "Ручной процесс", "Проводка [commercial]")
+
+  ContainerDb(DS_1C_Trade, "1С:Торговля и склад", "Файловый режим", "ТМЦ [commercial]")
+  ContainerDb(DS_1C_Acc, "1С:Бухгалтерия", "Файловый режим", "Проводки [commercial]")
+}
+
+Rel(Supplier, P4_1, "Накладная [commercial]")
+Rel(Warehouse, P4_1, "Приёмка [commercial]")
+Rel(P4_1, P4_2, "Данные поставки [commercial]")
+Rel(P4_2, DS_1C_Trade, "Приход [commercial]")
+Rel(DS_1C_Trade, P4_3, "Данные для учёта (OLE) [commercial]")
+Rel(P4_3, DS_1C_Acc, "Проводка [commercial]")
+Rel(DS_1C_Acc, Accountant, "Отчёт [commercial]")
+
+@enduml
