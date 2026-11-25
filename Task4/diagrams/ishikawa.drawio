@@ -1,0 +1,163 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0">
+  <diagram id="ishikawa-medikamente" name="Ishikawa">
+    <mxGraphModel dx="1768" dy="1028" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="head" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=16;fontStyle=1" value="Узкие места&#xa;при миграции" vertex="1">
+          <mxGeometry height="120" width="220" x="1580" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="spine" edge="1" parent="1" style="endArrow=classic;html=1;strokeWidth=4;strokeColor=#333333;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="80" y="540" as="sourcePoint" />
+            <mxPoint x="1580" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="inf_line" edge="1" parent="1" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#666666;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="540" as="sourcePoint" />
+            <mxPoint x="300" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="inf_title" parent="1" style="text;html=1;align=center;fontStyle=1;fontSize=14;" value="Инфраструктура" vertex="1">
+          <mxGeometry height="30" width="160" x="220" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="inf1" parent="1" style="text;html=1;align=left;fontSize=11;" value="Единый физический сервер — SPOF" vertex="1">
+          <mxGeometry height="20" width="200" x="160" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="inf2" parent="1" style="text;html=1;align=left;fontSize=11;" value="Файловый режим 1С не масштабируется" vertex="1">
+          <mxGeometry height="20" width="220" x="160" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="inf3" parent="1" style="text;html=1;align=left;fontSize=11;" value="Нет резервирования и бэкапов" vertex="1">
+          <mxGeometry height="20" width="220" x="160" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="inf4" parent="1" style="text;html=1;align=left;fontSize=11;" value="Один офис — сетевая задержка при филиалах" vertex="1">
+          <mxGeometry height="20" width="240" x="160" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="inf5" parent="1" style="text;html=1;align=left;fontSize=11;" value="AD, DNS, Exchange на одном хосте" vertex="1">
+          <mxGeometry height="20" width="240" x="160" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="sw_line" edge="1" parent="1" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#666666;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="750" y="540" as="sourcePoint" />
+            <mxPoint x="650" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sw_title" parent="1" style="text;html=1;align=center;fontStyle=1;fontSize=14;" value="Программное обеспечение" vertex="1">
+          <mxGeometry height="30" width="200" x="550" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="sw1" parent="1" style="text;html=1;align=left;fontSize=11;" value="Монолит: жёсткие связи модулей" vertex="1">
+          <mxGeometry height="20" width="220" x="520" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="sw2" parent="1" style="text;html=1;align=left;fontSize=11;" value="OLE-интеграция 1С устарела" vertex="1">
+          <mxGeometry height="20" width="220" x="520" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="sw3" parent="1" style="text;html=1;align=left;fontSize=11;" value="Excel как источник данных" vertex="1">
+          <mxGeometry height="20" width="220" x="520" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="sw4" parent="1" style="text;html=1;align=left;fontSize=11;" value="Нет API-контрактов и тегов" vertex="1">
+          <mxGeometry height="20" width="220" x="520" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="sw5" parent="1" style="text;html=1;align=left;fontSize=11;" value="Отсутствие аудита и логирования" vertex="1">
+          <mxGeometry height="20" width="220" x="520" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="data_line" edge="1" parent="1" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#666666;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1100" y="540" as="sourcePoint" />
+            <mxPoint x="1000" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="data_title" parent="1" style="text;html=1;align=center;fontStyle=1;fontSize=14;" value="Данные" vertex="1">
+          <mxGeometry height="30" width="200" x="900" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="data1" parent="1" style="text;html=1;align=left;fontSize=11;" value="Дублирование: Excel + 1С" vertex="1">
+          <mxGeometry height="20" width="220" x="880" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="data2" parent="1" style="text;html=1;align=left;fontSize=11;" value="Нет единого источника правды" vertex="1">
+          <mxGeometry height="20" width="220" x="880" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="data3" parent="1" style="text;html=1;align=left;fontSize=11;" value="Неструктурированные сканы, PDF, JPG" vertex="1">
+          <mxGeometry height="20" width="240" x="880" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="data4" parent="1" style="text;html=1;align=left;fontSize=11;" value="Нет Data Lineage и владельцев данных" vertex="1">
+          <mxGeometry height="20" width="260" x="880" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="data5" parent="1" style="text;html=1;align=left;fontSize=11;" value="Смешение PII/PHI и служебных данных" vertex="1">
+          <mxGeometry height="20" width="260" x="880" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="int_line" edge="1" parent="1" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#666666;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="540" as="sourcePoint" />
+            <mxPoint x="350" y="840" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="int_title" parent="1" style="text;html=1;align=center;fontStyle=1;fontSize=14;" value="Интеграция" vertex="1">
+          <mxGeometry height="30" width="160" x="270" y="860" as="geometry" />
+        </mxCell>
+        <mxCell id="int1" parent="1" style="text;html=1;align=left;fontSize=11;" value="Неформальный обмен с лабораторией" vertex="1">
+          <mxGeometry height="20" width="260" x="200" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="int2" parent="1" style="text;html=1;align=left;fontSize=11;" value="ККМ ↔ 1С через OLE" vertex="1">
+          <mxGeometry height="20" width="260" x="200" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="int3" parent="1" style="text;html=1;align=left;fontSize=11;" value="Нет API Gateway и контрактов" vertex="1">
+          <mxGeometry height="20" width="260" x="200" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="int4" parent="1" style="text;html=1;align=left;fontSize=11;" value="Exchange — неучтённый канал PII" vertex="1">
+          <mxGeometry height="20" width="260" x="200" y="850" as="geometry" />
+        </mxCell>
+        <mxCell id="staff_line" edge="1" parent="1" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#666666;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="800" y="540" as="sourcePoint" />
+            <mxPoint x="700" y="880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="staff_title" parent="1" style="text;html=1;align=center;fontStyle=1;fontSize=14;" value="Персонал" vertex="1">
+          <mxGeometry height="30" width="160" x="600" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="staff1" parent="1" style="text;html=1;align=left;fontSize=11;" value="Сопротивление изменениям" vertex="1">
+          <mxGeometry height="20" width="220" x="550" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="staff2" parent="1" style="text;html=1;align=left;fontSize=11;" value="Нет опыта микросервисов (только монолит)" vertex="1">
+          <mxGeometry height="20" width="280" x="550" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="staff3" parent="1" style="text;html=1;align=left;fontSize=11;" value="Малая команда: 3 IT-специалиста" vertex="1">
+          <mxGeometry height="20" width="260" x="550" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="staff4" parent="1" style="text;html=1;align=left;fontSize=11;" value="Нет обучения работе с тегами и OPA" vertex="1">
+          <mxGeometry height="20" width="280" x="550" y="850" as="geometry" />
+        </mxCell>
+        <mxCell id="staff5" parent="1" style="text;html=1;align=left;fontSize=11;" value="Неформальные практики (мессенджеры)" vertex="1">
+          <mxGeometry height="20" width="280" x="550" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_line" edge="1" parent="1" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#666666;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1150" y="540" as="sourcePoint" />
+            <mxPoint x="1050" y="880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="proc_title" parent="1" style="text;html=1;align=center;fontStyle=1;fontSize=14;" value="Процессы" vertex="1">
+          <mxGeometry height="30" width="160" x="950" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="proc1" parent="1" style="text;html=1;align=left;fontSize=11;" value="Ручная запись пациентов" vertex="1">
+          <mxGeometry height="20" width="240" x="900" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="proc2" parent="1" style="text;html=1;align=left;fontSize=11;" value="Двойной учёт платежей" vertex="1">
+          <mxGeometry height="20" width="240" x="900" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="proc3" parent="1" style="text:html=1;align=left;fontSize=11;" value="Нет согласий на ПДн в процессе" vertex="1">
+          <mxGeometry height="20" width="260" x="900" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="proc4" parent="1" style="text;html=1;align=left;fontSize=11;" value="Отсутствие процедуры уничтожения" vertex="1">
+          <mxGeometry height="20" width="260" x="900" y="850" as="geometry" />
+        </mxCell>
+        <mxCell id="proc5" parent="1" style="text;html=1;align=left;fontSize=11;" value="Нет мониторинга и алертинга" vertex="1">
+          <mxGeometry height="20" width="240" x="900" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="title" parent="1" style="text;html=1;align=center;fontSize=20;fontStyle=1;" value="Диаграмма Исикавы: узкие места миграции «Медикаменте»" vertex="1">
+          <mxGeometry height="40" width="700" x="500" y="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
